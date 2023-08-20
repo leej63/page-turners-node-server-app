@@ -3,18 +3,19 @@ import session from "express-session";
 import cors from 'cors';
 import 'dotenv/config';
 import BooksController from './controllers/books/books-controller.js';
-import UserController from './controllers/users/users-controller.js';
 import AuthController from './controllers/users/auth-controller.js';
+import UsersController from './controllers/users/users-controller.js';
 import mongoose from 'mongoose';
-const CONNECTION_STRING = process.env.DB_CONNECTION_STRING ? process.env.DB_CONNECTION_STRING: 'mongodb://127.0.0.1:27017/page-turner';
-mongoose.connect(CONNECTION_STRING)
+const DB_CONNECTION_STRING= 'mongodb+srv://chenfab:p2JTkzCQSZ7CJQH3@tuiter.x4bhfzh.mongodb.net/?retryWrites=true&w=majority'
 
+mongoose.connect(DB_CONNECTION_STRING)
 
 const app = express();
 app.use(
     cors({
         credentials: true,
-        origin: process.env.FRONTEND_URL,
+        // origin: process.env.FRONTEND_URL,
+        origin: 'http://localhost:3000',
     })
 );
 
@@ -46,5 +47,6 @@ app.use(express.json());
 BooksController(app);
 UserController(app);
 AuthController(app);
-
+UsersController(app);
 app.listen(process.env.PORT || 4000);
+
