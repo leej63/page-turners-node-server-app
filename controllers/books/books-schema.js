@@ -1,14 +1,15 @@
 import mongoose from 'mongoose';
 const schema = mongoose.Schema({
+    _id: Number,
     title: String,
-    author: String,
-    genre: String,
-    description: String,
-    image: String,
-    link: String,
-    published: Date,
-    rating: Number,
-    reviews: Array,
-    bookmarked: Boolean
+    isbn: String,
+    pageCount: Number,
+    publishedDate: Date,
+    thumbnailUrl: String,
+    shortDescription: String,
+    longDescription: String,
+    status: String,
+    authors: [String],
+    categories: [String]
 }, {collection: 'books'});
 export default schema;
