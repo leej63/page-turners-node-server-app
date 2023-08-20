@@ -1,6 +1,5 @@
 import * as booksDao from './books-dao.js'
 
-
 // title, author, genre, description, image, link, published, rating, reviews, bookmarked
 const createBook = async (req, res) => {
     const newBook = req.body;
@@ -16,22 +15,70 @@ const findBooks = async (req, res) => {
     res.json(books);
 };
 
+const findBookById = async (req, res) => {
+    const bookId = req.params.bid;
+    const book = await booksDao.findBookById(bookId);
+        if (book) {
+        res.json(book);
+    } else {
+        res.status(404).json({ message: 'Book not found' });
+    }
+};
+
+const findBookByISBN = async (req, res) => {
+  const isbnToSearch = req.params.isbn;
+  try {
+    const book = await booksDao.findBookByISBN(isbnToSearch);
+    if (book) {
+      res.json(book);
+    } else {
+      res.status(404).json({ message: 'No book found with the given ISBN' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'An error occurred while fetching book by ISBN' });
+  }
+};
+
 const updateBook = async (req, res) => {
     const bookIdToUpdate = req.params.bid;
+    const currentContent = await booksDao.findBookById(bookIdToUpdate);
+    if (!currentContent) {
+        res.json({ success: false, message: `Book with ID ${bookIdToUpdate} does not existed` });
+        return;
+    }
     const updates = req.body;
-    const status = await booksDao.updateBook(bookIdToUpdate, updates);
-    res.json(status);
+    try {
+            const updateResult = await booksDao.updateBook(bookIdToUpdate, updates);
+            if (updateResult.acknowledged && updateResult.modifiedCount == 1) {
+            res.json({ success: true, message: `Book with ID ${bookIdToUpdate} has been successfully updated` });
+            } else if (updateResult.modifiedCount == 0) {
+            res.json({ success: false, message: `No changes were applied to the book with ID ${bookIdToUpdate}` });
+            }
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'An error occurred while updating the book' });
+        }
 };
+
 
 const deleteBook = async (req, res) => {
     const bookIdToDelete = req.params.bid;
-    const status = await booksDao.deleteBook(bookIdToDelete);
-    res.json(status);
+    try {
+        const status = await booksDao.deleteBook(bookIdToDelete);
+        if (status.acknowledged && status.deletedCount == 1) {
+            res.json({ success: true, message: `Book with ID ${bookIdToDelete} has been successfully deleted` });
+        } else if (status.deletedCount == 0) {
+            res.json({ success: false, message: `The book with ID ${bookIdToDelete} does not exist` });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'An error occurred while deleting the book' });
+    }
 };
 
 export default (app) => {
     app.post('/api/books', createBook);
     app.get('/api/books', findBooks);
+    app.get('/api/books/:bid', findBookById);
+    app.get('/api/books/isbn/:isbn', findBookByISBN);
     app.put('/api/books/:bid', updateBook);
-    app.delete('/api/books/:tid', deleteBook);
+    app.delete('/api/books/:bid', deleteBook);
 }
