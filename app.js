@@ -45,7 +45,7 @@ app.use(
 );
 app.use(express.json());
 BooksController(app);
-UserController(app);
+UsersController(app);
 AuthController(app);
 UsersController(app);
 app.listen(process.env.PORT || 4000);
