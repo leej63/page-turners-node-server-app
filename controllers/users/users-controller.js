@@ -1,13 +1,12 @@
 import * as usersDao from "./users-dao.js";
 
-
 const UserController = (app) => {
-   app.get('/api/users', findAllUsers);
-   app.get('/api/users/:uid', findUserById);
-   app.post('/api/users', createUser);
-   app.delete('/api/users/:uid', deleteUser);
-   app.put('/api/users/:uid', updateUser);
-}
+  app.get("/api/users", findAllUsers);
+  app.get("/api/users/:uid", findUserById);
+  app.post("/api/users", createUser);
+  app.delete("/api/users/:uid", deleteUser);
+  app.put("/api/users/:uid", updateUser);
+};
 
 const findAllUsers = async (req, res) => {
   const username = req.query.username;
@@ -33,28 +32,37 @@ const findAllUsers = async (req, res) => {
 };
 
 const findUserById = async (req, res) => {
-    const id = req.params.id;
-    const user = await usersDao.findUserById(id);
-    res.json(user);
-} 
+  const id = req.params.id;
+  const user = await usersDao.findUserById(id);
+  res.json(user);
+};
 
 const createUser = async (req, res) => {
-    const newUser = await usersDao.createUser(req.body);
-    res.json(newUser);
-}
+  const newUser = await usersDao.createUser(req.body);
+  res.json(newUser);
+};
 
 const deleteUser = async (req, res) => {
-    const id = req.params.id;
-    const status = await usersDao.deleteUser(id);
-    res.json(status);
-}
+  const id = req.params.id;
+  const status = await usersDao.deleteUser(id);
+  res.json(status);
+};
 
 const updateUser = async (req, res) => {
-    const id = req.params.id;
-    const status = await usersDao.updateUser(id, req.body);
-    const user = await usersDao.findUserById(id);
-    req.session["currentUser"] = user;
-    res.json(status);  
-}   
+  const username = req.body.username;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const role = req.body.role;
+  if (!username || !firstName || !lastName || !role) {
+    res.sendStatus(400);
+    return;
+  }
+  
+  const id = req.params.uid;
+  const status = await usersDao.updateUser(id, req.body);
+  const user = await usersDao.findUserById(id);
+  req.session["currentUser"] = user;
+  res.json(status);
+};
 
-export default UserController
+export default UserController;

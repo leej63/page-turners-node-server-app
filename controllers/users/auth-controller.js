@@ -46,11 +46,12 @@ const AuthController = (app) => {
 
     const profile = (req, res) => {
         const currentUser = req.session["currentUser"];
+
         if (!currentUser) {
             res.sendStatus(404);
             return;
         }
-        res.json(currentUser);
+        res.status(200).json(currentUser);
     };
 
     const logout = async (req, res) => {
@@ -71,7 +72,7 @@ const AuthController = (app) => {
 
     app.post("/api/users/register", register);
     app.post("/api/users/login",    login);
-    app.post("/api/users/profile",  profile);
+    app.get("/api/users/profile",  profile);
     app.post("/api/users/logout",   logout);
     app.put("/api/users",           update);
 };
