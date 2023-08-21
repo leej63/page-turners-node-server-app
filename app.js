@@ -7,7 +7,7 @@ import AuthController from './controllers/users/auth-controller.js';
 import UsersController from './controllers/users/users-controller.js';
 import mongoose from 'mongoose';
 const DB_CONNECTION_STRING = process.env.DB_CONNECTION_STRING
-
+// const DB_CONNECTION_STRING= 'mongodb+srv://chenfab:p2JTkzCQSZ7CJQH3@tuiter.x4bhfzh.mongodb.net/?retryWrites=true&w=majority'
 mongoose.connect(DB_CONNECTION_STRING)
 
 const app = express();
@@ -15,6 +15,7 @@ app.use(
     cors({
         credentials: true,
         origin: process.env.FRONTEND_URL,
+        // origin: 'http://localhost:3000',
     })
 );
 const sessionOptions = {
