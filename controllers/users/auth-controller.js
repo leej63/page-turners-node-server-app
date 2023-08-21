@@ -50,13 +50,13 @@ const AuthController = (app) => {
     if (mongoose.Types.ObjectId.isValid(id)) {
         const user = await usersDao.findUserById(id);
         if (!user) {
-          res.sendStatus(500);
+          res.sendStatus(404);
           return;
         }
         req.session["currentUser"] = user;
         res.status(200).json(user);
     } else {
-        res.sendStatus(409);
+        res.sendStatus(404);
         return;
     }
 
