@@ -6,8 +6,7 @@ import BooksController from './controllers/books/books-controller.js';
 import AuthController from './controllers/users/auth-controller.js';
 import UsersController from './controllers/users/users-controller.js';
 import mongoose from 'mongoose';
-const DB_CONNECTION_STRING= 'mongodb+srv://chenfab:p2JTkzCQSZ7CJQH3@tuiter.x4bhfzh.mongodb.net/?retryWrites=true&w=majority'
-
+const DB_CONNECTION_STRING=process.env.DB_CONNECTION_STRING;
 mongoose.connect(DB_CONNECTION_STRING)
 
 const app = express();
