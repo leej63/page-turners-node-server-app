@@ -39,6 +39,48 @@ const findBookByISBN = async (req, res) => {
   }
 };
 
+const findBookByTitle = async (req, res) => {
+    const titleToSearch = req.params.title;
+    try {
+        const book = await booksDao.findBookByTitle(titleToSearch);
+        if (book) {
+            res.json(book);
+        } else {
+            res.status(404).json({ message: 'No book found with the given title' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred while fetching book by title' });
+    }
+};
+
+const findBooksByAuthor = async (req, res) => {
+    const authorToSearch = req.params.author;
+    try {
+        const books = await booksDao.findBooksByAuthor(authorToSearch);
+        if (books) {
+            res.json(books);
+        } else {
+            res.status(404).json({ message: 'No books found with the given author' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred while fetching books by author' });
+    }
+};
+
+const findBooksByCategory = async (req, res) => {
+    const categoryToSearch = req.params.category;
+    try {
+        const books = await booksDao.findBooksByCategory(categoryToSearch);
+        if (books) {
+            res.json(books);
+        } else {
+            res.status(404).json({ message: 'No books found with the given category' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred while fetching books by category' });
+    }
+};
+
 const updateBook = async (req, res) => {
     const bookIdToUpdate = req.params.bid;
     const currentContent = await booksDao.findBookById(bookIdToUpdate);
@@ -79,6 +121,9 @@ export default (app) => {
     app.get('/api/books', findBooks);
     app.get('/api/books/:bid', findBookById);
     app.get('/api/books/isbn/:isbn', findBookByISBN);
+    app.get('/api/books/title/:title', findBookByTitle);
+    app.get('/api/books/author/:author', findBooksByAuthor);
+    app.get('/api/books/category/:category', findBooksByCategory);
     app.put('/api/books/:bid', updateBook);
     app.delete('/api/books/:bid', deleteBook);
 }
