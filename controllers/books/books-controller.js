@@ -25,6 +25,15 @@ const findBookById = async (req, res) => {
     }
 };
 
+const findBookmarkByUserId = async (req, res) => {
+  try {
+    const bookmarkedBooks = await booksDao.findBooksByBookmark();
+    res.json(bookmarkedBooks);
+  } catch (error) {
+    res.status(500).json({ message: 'An error occurred while fetching bookmarked books' });
+  }
+};
+
 const findBookByISBN = async (req, res) => {
   const isbnToSearch = req.params.isbn;
   try {
@@ -120,6 +129,7 @@ export default (app) => {
     app.post('/api/books', createBook);
     app.get('/api/books', findBooks);
     app.get('/api/books/:bid', findBookById);
+    app.get('/api/books/users/1', findBookmarkByUserId);
     app.get('/api/books/isbn/:isbn', findBookByISBN);
     app.get('/api/books/title/:title', findBookByTitle);
     app.get('/api/books/author/:author', findBooksByAuthor);
