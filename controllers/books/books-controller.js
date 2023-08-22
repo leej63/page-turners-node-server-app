@@ -91,7 +91,7 @@ const updateBook = async (req, res) => {
     const updates = req.body;
     try {
             const updateResult = await booksDao.updateBook(bookIdToUpdate, updates);
-            if (updateResult.acknowledged && updateResult.modifiedCount == 1) {
+            if (updateResult.acknowledged && updateResult.modifiedCount != 0) {
             res.json({ success: true, message: `Book with ID ${bookIdToUpdate} has been successfully updated` });
             } else if (updateResult.modifiedCount == 0) {
             res.json({ success: false, message: `No changes were applied to the book with ID ${bookIdToUpdate}` });

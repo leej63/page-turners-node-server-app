@@ -10,6 +10,9 @@ const schema = mongoose.Schema({
     longDescription: String,
     status: String,
     authors: [String],
-    categories: [String]
+    categories: [String],
+    review: String,
+    bookmarked: Boolean,
+    rating: Number
 }, {collection: 'books'});
 export default schema;
