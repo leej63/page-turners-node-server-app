@@ -3,6 +3,7 @@ import booksModel from './books-model.js';
 export const findBooks = () => booksModel.find();
 export const findBookById = (bid) => booksModel.findOne({_id: bid});
 export const findBookByISBN = (isbn) => booksModel.findOne({ isbn: isbn });
+export const findBooksByBookmark = () => booksModel.find({ bookmarked: true });
 export const findBookByTitle = (title) => booksModel.findOne({ title: title });
 export const findBooksByAuthor = (author) => booksModel.findAll({ author: author });
 export const findBooksByCategory = (category) => booksModel.findAll({ category: category });
